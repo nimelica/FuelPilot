@@ -13,5 +13,5 @@ def signup():
     form = UserForm()
     if form.validate_on_submit():
         # Save the user information to database or perform other actions
-        return redirect(url_for('home'))
+        return redirect(url_for('views.home'))
     return render_template('signup.html', form=form)
