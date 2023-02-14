@@ -1,6 +1,18 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, IntegerField, DateField
-from wtforms.validators import DataRequired, Length, NumberRange
+from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField, DateField
+from wtforms.validators import DataRequired, Length, NumberRange, EqualTo
+
+states = [("AL", "Alabama"), ("AK", "Alaska"), ("AZ", "Arizona"), ("AR", "Arkansas"), ("CA", "California"),
+          ("CO", "Colorado"), ("CT", "Connecticut"), ("DE", "Delaware"), ("FL", "Florida"), ("GA", "Georgia"),
+          ("HI", "Hawaii"), ("ID", "Idaho"), ("IL", "Illinois"), ("IN", "Indiana"), ("IA", "Iowa"),
+          ("KS", "Kansas"), ("KY", "Kentucky"), ("LA", "Louisiana"), ("ME", "Maine"), ("MD", "Maryland"),
+          ("MA", "Massachusetts"), ("MI", "Michigan"), ("MN", "Minnesota"), ("MS", "Mississippi"),
+          ("MO", "Missouri"), ("MT", "Montana"), ("NE", "Nebraska"), ("NV", "Nevada"), ("NH", "New Hampshire"),
+          ("NJ", "New Jersey"), ("NM", "New Mexico"), ("NY", "New York"), ("NC", "North Carolina"),
+          ("ND", "North Dakota"), ("OH", "Ohio"), ("OK", "Oklahoma"), ("OR", "Oregon"), ("PA", "Pennsylvania"),
+          ("RI", "Rhode Island"), ("SC", "South Carolina"), ("SD", "South Dakota"), ("TN", "Tennessee"),
+          ("TX", "Texas"), ("UT", "Utah"), ("VT", "Vermont"), ("VA", "Virginia"), ("WA", "Washington"),
+          ("WV", "West Virginia"), ("WI", "Wisconsin"), ("WY", "Wyoming")]
 
 class InfoForm(FlaskForm):
     full_name = StringField("Full Name", validators=[DataRequired(), Length(max=50)])
@@ -21,19 +33,6 @@ class QuoteFuelForm(FlaskForm):
 
 class UserForm(FlaskForm):
     username = StringField("Username: ", validators=[DataRequired()])
-    password = PasswordField("Password: ", validators=[DataRequired(), EqualTo("password_verified"), message="Password Must Match!"])
+    password = PasswordField("Password: ", validators=[DataRequired(), EqualTo("password_verified", message="Password Must Match!")])
     password_verified = PasswordField("Verify Password: ", validators=[DataRequired()])
-    submit - SubmitField("Sign Up")
-
-states = [("AL", "Alabama"), ("AK", "Alaska"), ("AZ", "Arizona"), ("AR", "Arkansas"), ("CA", "California"),
-          ("CO", "Colorado"), ("CT", "Connecticut"), ("DE", "Delaware"), ("FL", "Florida"), ("GA", "Georgia"),
-          ("HI", "Hawaii"), ("ID", "Idaho"), ("IL", "Illinois"), ("IN", "Indiana"), ("IA", "Iowa"),
-          ("KS", "Kansas"), ("KY", "Kentucky"), ("LA", "Louisiana"), ("ME", "Maine"), ("MD", "Maryland"),
-          ("MA", "Massachusetts"), ("MI", "Michigan"), ("MN", "Minnesota"), ("MS", "Mississippi"),
-          ("MO", "Missouri"), ("MT", "Montana"), ("NE", "Nebraska"), ("NV", "Nevada"), ("NH", "New Hampshire"),
-          ("NJ", "New Jersey"), ("NM", "New Mexico"), ("NY", "New York"), ("NC", "North Carolina"),
-          ("ND", "North Dakota"), ("OH", "Ohio"), ("OK", "Oklahoma"), ("OR", "Oregon"), ("PA", "Pennsylvania"),
-          ("RI", "Rhode Island"), ("SC", "South Carolina"), ("SD", "South Dakota"), ("TN", "Tennessee"),
-          ("TX", "Texas"), ("UT", "Utah"), ("VT", "Vermont"), ("VA", "Virginia"), ("WA", "Washington"),
-          ("WV", "West Virginia"), ("WI", "Wisconsin"), ("WY", "Wyoming")]
-
+    submit = SubmitField("Sign Up")
