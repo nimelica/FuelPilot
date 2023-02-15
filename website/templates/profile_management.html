@@ -15,18 +15,26 @@
             {{ form.address_1(class="form-control", size=100) }}
         </div>
         <div class="form-group">
+            <label for="address2">{{ form.address_2.label }}</label>
+            {{ form.address_2(class="form-control", size=100) }}
+        </div>
+        <div class="form-group">
             <label for="city">{{ form.city.label }}</label>
             {{ form.city(class="form-control", size=100) }}
         </div>
         <div class="form-group">
-            <label for="address2">{{ form.address_2.label }}</label>
-            {{ form.address_2(class="form-control", size=100) }}
-        </div>
-        
-        <div class="form-group">
             <label for="state">{{ form.state.label }}</label>
             </br>
-            <label for="state_select">{{ form.state }}</label>
+            <label for="state-select">
+                <select name="state-select" id="my_select">
+                    {% for option in form.state %}
+                        {% if loop.first %}
+                            <option value="" disabled selected>Select one...</option>
+                        {% endif %}
+                        {{option}}
+                    {% endfor %}
+                </select>
+            </label>
         </div>
         <div class="form-group">
             <label for="zipcode">{{ form.zipcode.label }}</label>
