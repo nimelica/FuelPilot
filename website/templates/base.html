@@ -10,7 +10,12 @@
 
     <!-- Our CSS -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-    <title>fuel app</title>
+    <!-- <title>fuel app</title> -->
+    {% if title %}
+      <title>Fuel App - {{title}}</title>
+    {%else%}
+      <title>Fuel App</title>
+    {%endif%}    
   </head>
   <body>
         {% include 'navbar.html' %}
