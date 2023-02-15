@@ -16,6 +16,13 @@ def signup():
         return None
     return render_template('signup.html', form=form)
 
+
+@views.route("/fuel_quote_form", methods=['GET', 'POST'])
+def fuel_quote_form():
+    form = QuoteFuelForm()
+    return render_template('fuel_quote_form.html', form=form)
+
+
 @views.route("/login",methods=["GET","POST"])
 def login():
    form = LoginForm()
@@ -25,12 +32,8 @@ def login():
         return None
    return render_template('login.html', form=form)
 
-@views.route("/quote", methods=['GET', 'POST'])
-def quote():
-    form = QuoteFuelForm()
-    return render_template('FuelQuoteForm.html', form=form)
 
-@views.route("/profilemanagement", methods=['GET', 'POST'])
-def profilemanagement():
+@views.route("/profile_management", methods=['GET', 'POST'])
+def profile_management():
     form = InfoForm()
-    return render_template('ProfileMangagement.html', form=form)
+    return render_template('profile_management.html', form=form)
