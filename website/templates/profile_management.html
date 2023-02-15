@@ -15,9 +15,14 @@
             {{ form.address_1(class="form-control", size=100) }}
         </div>
         <div class="form-group">
+            <label for="city">{{ form.city.label }}</label>
+            {{ form.city(class="form-control", size=100) }}
+        </div>
+        <div class="form-group">
             <label for="address2">{{ form.address_2.label }}</label>
             {{ form.address_2(class="form-control", size=100) }}
         </div>
+        
         <div class="form-group">
             <label for="state">{{ form.state.label }}</label>
             </br>
