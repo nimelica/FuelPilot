@@ -19,7 +19,7 @@ class InfoForm(FlaskForm):
     address_1 = StringField("Address 1", validators=[DataRequired(), Length(max=100)])
     address_2 = StringField("Address 2", validators=[Length(max=100)])
     city = StringField("City", validators=[DataRequired(), Length(max=100)])
-    state = SelectField("State", validators=[DataRequired()], choices=states)
+    state = SelectField("State", validators=[DataRequired()], choices=[_[0] for _ in states])
     zipcode = StringField("Zipcode", validators=[DataRequired(), Length(min=5, max=9)])
     submit = SubmitField("Save")
 
