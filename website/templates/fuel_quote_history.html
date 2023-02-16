@@ -7,16 +7,21 @@
             <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">Timestamp</th>
-                    <th scope="col">Gallons Requested</th>
-                    <th scope="col">Delivery Address</th>
-                    <th scope="col">Delivery Date</th>
-                    <th scope="col">Suggested Price / gallon</th>
-                    <th scope="col">Total Amount Due</th>
+                    {% for column in form.column_names %}
+                      <th scope="col">{{ column }}</th>
+                    {% endfor %}
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  {% for timestamp, data in form.history_data.items() %}
+                    <tr>
+                      <th scope="row">{{ timestamp }}</th>
+                      {% for datum in data %}
+                        <td>{{ datum }}</td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                  <!-- <tr>
                     <th scope="row">02/16/2023 5:10pm</th>
                     <td>2</td>
                     <td>Center Street</td>
@@ -39,7 +44,7 @@
                     <td>03/01/2023</td>
                     <td>$3.00</td>
                     <td>$3.00</td>
-                  </tr>
+                  </tr> -->
                 </tbody>
               </table>
         </form>

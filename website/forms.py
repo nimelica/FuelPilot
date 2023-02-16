@@ -32,7 +32,17 @@ class QuoteFuelForm(FlaskForm):
     submit = SubmitField("Submit")
 
 class QuoteFuelHistory(FlaskForm):
-    pass
+    column_names = ['Timestamp',
+                    'Gallons Requested',
+                    'Delivery Address',
+                    'Delivery Date',
+                    'Suggested Price / gallon',
+                    'Total Amount Due']
+    # hard-coded the history data since we don't have a backend yet
+    history_data = {}
+    history_data['02/16/2023 5:10pm'] = [2, 'Center Street', '03/01/2023', '$3.00', '$6.00']
+    history_data['02/17/2023 5:10pm'] = [2, 'Center Street', '03/01/2023', '$3.00', '$6.00']
+    history_data['02/18/2023 5:10pm'] = [2, 'Center Street', '03/01/2023', '$3.00', '$6.00']
 
 class UserForm(FlaskForm):
     username = StringField("Username: ", validators=[DataRequired()])
