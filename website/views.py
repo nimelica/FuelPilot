@@ -25,6 +25,13 @@ def fuel_quote_form():
     return render_template('fuel_quote_form.html', form=form, title=title)
 
 
+@views.route("/fuel_quote_history", methods=['GET', 'POST'])
+def fuel_quote_history():
+    form = QuoteFuelHistory()
+    title = 'Quote History'
+    return render_template('fuel_quote_history.html', form=form, title=title)
+
+
 @views.route("/login",methods=["GET","POST"])
 def login():
    form = LoginForm()

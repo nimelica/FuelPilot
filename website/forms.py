@@ -31,6 +31,9 @@ class QuoteFuelForm(FlaskForm):
     total_amount_due = IntegerField("Total Amount Due", validators=[DataRequired()], render_kw={"readonly": True})
     submit = SubmitField("Submit")
 
+class QuoteFuelHistory(FlaskForm):
+    pass
+
 class UserForm(FlaskForm):
     username = StringField("Username: ", validators=[DataRequired()])
     password = PasswordField("Password: ", validators=[DataRequired(), EqualTo("password_verified", message="Password Must Match!")])
