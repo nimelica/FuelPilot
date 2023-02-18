@@ -13,7 +13,7 @@
 4. Ming-Kai Chen
 
 
-## Instructions:
+## Instructions
 Before running the script, run this in the terminal:
 ```
 pip install -r requirements.txt
@@ -24,7 +24,7 @@ To run the website, run:
 python main.py
 ```
 
-## Frontend:
+## Frontend
 * Registration Page
 
 ![Registration Page](assets/images/register.png)
