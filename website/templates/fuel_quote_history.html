@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="shadow p-3 mb-5 bg-body rounded">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <table class="table">
+                <thead>
+                  <tr>
+                    {% for column in form.column_names %}
+                      <th scope="col">{{ column }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for timestamp, data in form.history_data.items() %}
+                    <tr>
+                      <th scope="row">{{ timestamp }}</th>
+                      {% for datum in data %}
+                        <td>{{ datum }}</td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </form>
+</div>
+{% endblock %}
