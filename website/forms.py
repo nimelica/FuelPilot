@@ -19,7 +19,7 @@ class InfoForm(FlaskForm):
     address_1 = StringField("Address 1", validators=[DataRequired(), Length(max=100)])
     address_2 = StringField("Address 2", validators=[Length(max=100)])
     city = StringField("City", validators=[DataRequired(), Length(max=100)])
-    state = SelectField("State", validators=[DataRequired()], choices=states)
+    state = SelectField("State", validators=[DataRequired()], choices=[_[0] for _ in states])
     zipcode = StringField("Zipcode", validators=[DataRequired(), Length(min=5, max=9)])
     submit = SubmitField("Save")
 
@@ -30,6 +30,19 @@ class QuoteFuelForm(FlaskForm):
     suggested_price = IntegerField("Suggested Price / gallon", validators=[DataRequired()], render_kw={"readonly": True})
     total_amount_due = IntegerField("Total Amount Due", validators=[DataRequired()], render_kw={"readonly": True})
     submit = SubmitField("Submit")
+
+class QuoteFuelHistory(FlaskForm):
+    column_names = ['Timestamp',
+                    'Gallons Requested',
+                    'Delivery Address',
+                    'Delivery Date',
+                    'Suggested Price / gallon',
+                    'Total Amount Due']
+    # hard-coded the history data since we don't have a backend yet
+    history_data = {}
+    history_data['02/16/2023 5:10pm'] = [2, 'Center Street', '03/01/2023', '$3.00', '$6.00']
+    history_data['02/17/2023 5:10pm'] = [2, 'Center Street', '03/01/2023', '$3.00', '$6.00']
+    history_data['02/18/2023 5:10pm'] = [2, 'Center Street', '03/01/2023', '$3.00', '$6.00']
 
 class UserForm(FlaskForm):
     username = StringField("Username: ", validators=[DataRequired()])

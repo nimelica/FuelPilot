@@ -10,30 +10,41 @@ def home():
 @views.route("/signup", methods=['GET', 'POST'])
 def signup():
     form = UserForm()
+    title = 'Register'
     if form.validate_on_submit():
         # Save the user information to database or perform other actions
         #return redirect(url_for('views.home'))
         return None
-    return render_template('signup.html', form=form)
+    return render_template('signup.html', form=form, title=title)
 
 
 @views.route("/fuel_quote_form", methods=['GET', 'POST'])
 def fuel_quote_form():
     form = QuoteFuelForm()
-    return render_template('fuel_quote_form.html', form=form)
+    title = 'Quote Form'
+    return render_template('fuel_quote_form.html', form=form, title=title)
+
+
+@views.route("/fuel_quote_history", methods=['GET', 'POST'])
+def fuel_quote_history():
+    form = QuoteFuelHistory()
+    title = 'Quote History'
+    return render_template('fuel_quote_history.html', form=form, title=title)
 
 
 @views.route("/login",methods=["GET","POST"])
 def login():
    form = LoginForm()
+   title = 'Login'
    #check submission and if login is in database
    if form.validate_on_submit():
         #return redirect(url_for('views.home'))
         return None
-   return render_template('login.html', form=form)
+   return render_template('login.html', form=form, title=title)
 
 
 @views.route("/profile_management", methods=['GET', 'POST'])
 def profile_management():
     form = InfoForm()
-    return render_template('profile_management.html', form=form)
+    title = 'Profile'
+    return render_template('profile_management.html', form=form, title=title)
