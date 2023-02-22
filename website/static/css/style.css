@@ -14,6 +14,30 @@ input {
         border-width: 1px;
 }
 
+a:link {
+        color: grey;
+        background-color: transparent;
+        text-decoration: none;
+      }
+      
+a:visited {
+        color: grey;
+        background-color: transparent;
+        text-decoration: none;
+}
+
+a:hover {
+        color: dimgrey;
+        background-color: transparent;
+        text-decoration: underline;
+}
+
+a:active {
+        color: grey;
+        background-color: transparent;
+        text-decoration: underline;
+}
+
 .form-group {
     display: block;
     margin: 0.5rem 0;

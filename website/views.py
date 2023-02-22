@@ -3,9 +3,13 @@ from .forms import *
 
 views = Blueprint("views",__name__)
 
-@views.route("/")
+
+@views.route("/", methods=['GET','POST'])
 def home():
-    return render_template("home.html")
+    form = LoginForm()
+    title = 'Home'
+    return render_template("home.html",form=form,title=title)
+
 
 @views.route("/signup", methods=['GET', 'POST'])
 def signup():
