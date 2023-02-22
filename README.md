@@ -25,6 +25,10 @@ python main.py
 ```
 
 ## Frontend
+* Home Page
+
+![Home Page](assets/images/home.png)
+
 * Registration Page
 
 ![Registration Page](assets/images/register.png)
