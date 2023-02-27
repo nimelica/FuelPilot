@@ -1,5 +1,6 @@
 from flask import Blueprint ,render_template
 from .forms import *
+from .models import *
 
 views = Blueprint("views",__name__)
 
