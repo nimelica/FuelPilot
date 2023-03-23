@@ -1,6 +1,8 @@
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from .config import db
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 class UserCredentials(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,4 +28,3 @@ class FuelQuote(db.Model):
     suggested_price = db.Column(db.Float)
     total_amount_due = db.Column(db.Float)
     client_id = db.Column(db.Integer, db.ForeignKey('client_information.id'))
-
