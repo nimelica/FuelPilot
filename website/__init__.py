@@ -1,6 +1,6 @@
+from .db_init import init_db
 from flask import Flask
 from os import path, urandom
-from .config import db
 
 def create_app():
     app = Flask(__name__)
@@ -14,18 +14,16 @@ def create_app():
     with open(secret_key_file, 'rb') as f:
         app.config['SECRET_KEY'] = f.read()
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///database.db'
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    # Configuring SQLAlchemy
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fuel.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # initialize the database
-    db.init_app(app)
+    # Initialize database
+    init_db(app)
 
     #import the modules
     from .views import views
+
     app.register_blueprint(views, url_prefix = "/")
 
-    # import the models
-    from .models import UserCredentials, ClientInformation
-
     return app
-
