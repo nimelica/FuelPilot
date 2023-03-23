@@ -26,7 +26,7 @@ def signup():
     form = UserForm()
     title = 'Register'
     if form.validate_on_submit():
-        flash("Sucessfully created Account!",category="sucess")
+        flash("Successfully created Account!",category="success")
         return  redirect(url_for('views.home'))
     return render_template('signup.html', form=form, title=title)
 
@@ -37,7 +37,7 @@ def login():
    if form.validate_on_submit():
         #check whether username/password if they exist rout to home page else alert user invalid input and rerender the template
         if form.username.data == "user1" and form.password.data == "1234":
-            flash("Login was Sucessful!.",category="sucess")
+            flash("Login was Successful!",category="success")
             return  redirect(url_for('views.home'))
         else:
             flash("Invalid Username or Password please try again.",category="error")
@@ -49,6 +49,6 @@ def profile_management():
     form = InfoForm()
     title = 'Profile'
     if form.validate_on_submit():
-        flash("Sucessfully registered Profile!",category="sucess")
+        flash("Successfully registered Profile!",category="success")
         return  redirect(url_for('views.home'))
     return render_template('profile_management.html', form=form, title=title)
