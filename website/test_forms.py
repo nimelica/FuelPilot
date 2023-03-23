@@ -46,15 +46,28 @@ class TestInfoForm(unittest.TestCase):
 class TestQuoteFuelForm(unittest.TestCase):    
     def test_all_valid(self):
         create_app()
-        form = QuoteFuelForm()
+        form = QuoteFuelForm(gallons_requested =2,
+                             delivery_address='main street',
+                             delivery_date= '03/01/2023',
+                             suggested_price=5,
+                             total_amount_due=10
+                            )
         self.assertTrue(form.validate())
 
     def test_some_valid(self):
         create_app()
-        form = QuoteFuelForm()
+        form = QuoteFuelForm(gallons_requested =0,
+                             delivery_address='holly hall',
+                             delivery_date='04/01/2023',
+                             suggested_price=10,
+                             total_amount_due=20)
         self.assertFalse(form.validate())
 
     def test_none_valid(self):
         create_app()
-        form = QuoteFuelForm()
+        form = QuoteFuelForm(gallons_requested =0,
+                             delivery_address='scott st',
+                             delivery_date='05/01/2023',
+                             suggested_price=20,
+                             total_amount_due=30)
         self.assertFalse(form.validate())
