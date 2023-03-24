@@ -46,28 +46,115 @@ class TestInfoForm(unittest.TestCase):
 class TestQuoteFuelForm(unittest.TestCase):    
     def test_all_valid(self):
         create_app()
-        form = QuoteFuelForm(gallons_requested =2,
+        form = QuoteFuelForm(gallons_requested=2,
                              delivery_address='main street',
                              delivery_date= '03/01/2023',
                              suggested_price=5,
                              total_amount_due=10
                             )
+        print('\nTesting QuoteFuelForm for All Valid')
         self.assertTrue(form.validate())
 
     def test_some_valid(self):
         create_app()
-        form = QuoteFuelForm(gallons_requested =0,
+        form = QuoteFuelForm(gallons_requested=0,
                              delivery_address='holly hall',
                              delivery_date='04/01/2023',
                              suggested_price=10,
                              total_amount_due=20)
+        print('\nTesting QuoteFuelForm for Some Valid')
         self.assertFalse(form.validate())
 
     def test_none_valid(self):
         create_app()
-        form = QuoteFuelForm(gallons_requested =0,
+        form = QuoteFuelForm(gallons_requested=0,
                              delivery_address='scott st',
                              delivery_date='05/01/2023',
                              suggested_price=20,
                              total_amount_due=30)
+        print('\nTesting QuoteFuelForm for None Valid')
+        self.assertFalse(form.validate())
+
+
+# class TestQuoteFuelHistory(unittest.TestCase):
+#     def test_all_valid(self):
+#         create_app()
+#         form = QuoteFuelHistory()
+#         print('\nTesting QuoteFuelHistory for All Valid')
+#         self.assertTrue(form.validate())
+
+#     def test_some_valid(self):
+#         create_app()
+#         form = QuoteFuelHistory()
+#         print('\nTesting QuoteFuelHistory for Some Valid')
+#         self.assertFalse(form.validate())
+
+
+#     def test_none_valid(self):
+#         create_app()
+#         form = QuoteFuelHistory()
+#         print('\nTesting QuoteFuelHistory for None Valid')
+#         self.assertFalse(form.validate())
+
+
+class TestUserForm(unittest.TestCase):
+    def test_all_valid(self):
+        create_app()
+        form = UserForm(
+            username='user_good',
+            password='pass_good',
+            password_verified='pass_good'
+        )
+        print('\nTesting UserForm for All Valid')
+        self.assertTrue(form.validate())
+
+    def test_some_valid(self):
+        create_app()
+        form = UserForm(
+            username='user_good',
+            password='pass_good',
+            password_verified='pass_bad'
+        )
+        print('\nTesting UserForm for Some Valid')
+        self.assertFalse(form.validate())
+
+
+    def test_none_valid(self):
+        create_app()
+        form = UserForm(
+            username='',
+            password='pass_good',
+            password_verified='pass_bad'
+        )
+        print('\nTesting UserForm for None Valid')
+        self.assertFalse(form.validate())
+
+
+class TestLoginForm(unittest.TestCase):
+    def test_all_valid(self):
+        create_app()
+        form = LoginForm(
+            username='user_good',
+            password='pass_good'
+        )
+        print('\nTesting LoginForm for All Valid')
+        self.assertTrue(form.validate())
+
+    def test_some_valid(self):
+        create_app()
+        form = LoginForm(
+            username='user_good',
+            password=''
+        )
+        print('\nTesting LoginForm for Some Valid')
+        self.assertFalse(form.validate())
+
+
+    def test_none_valid(self):
+        create_app()
+        form = LoginForm(
+            username='',
+            password=''
+        )
+        print('\nTesting LoginForm for None Valid')
         self.assertFalse(form.validate())
