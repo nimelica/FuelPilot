@@ -128,6 +128,16 @@ class TestUserForm(unittest.TestCase):
         )
         print('\nTesting UserForm for None Valid')
         self.assertFalse(form.validate())
+    
+    def test_none_valid2(self):
+        create_app()
+        form = UserForm(
+            username='',
+            password='',
+            password_verified=''
+        )
+        print('\nTesting UserForm for empty input')
+        self.assertFalse(form.validate())
 
 
 class TestLoginForm(unittest.TestCase):
@@ -140,15 +150,23 @@ class TestLoginForm(unittest.TestCase):
         print('\nTesting LoginForm for All Valid')
         self.assertTrue(form.validate())
 
-    def test_some_valid(self):
+    def test_only_username_valid(self):
         create_app()
         form = LoginForm(
             username='user_good',
             password=''
         )
-        print('\nTesting LoginForm for Some Valid')
+        print('\nTesting LoginForm for only username valid')
         self.assertFalse(form.validate())
 
+    def test_only_password_valid(self):
+        create_app()
+        form = LoginForm(
+            username='',
+            password='pass_good'
+        )
+        print('\nTesting LoginForm for only password valid')
+        self.assertFalse(form.validate())
 
     def test_none_valid(self):
         create_app()
