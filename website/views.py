@@ -1,5 +1,6 @@
 from flask import Blueprint ,render_template,redirect,url_for,flash
 from .forms import *
+from .models import *
 
 views = Blueprint("views",__name__)
 
