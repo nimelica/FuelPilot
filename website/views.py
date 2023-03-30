@@ -11,6 +11,7 @@ def home():
     title = 'Home'
     return render_template("home.html",form=form,title=title)
 
+
 @views.route("/signup", methods=['GET', 'POST'])
 def signup():
     form = UserForm()
@@ -31,7 +32,7 @@ def signup():
         session['user_id'] = new_user.id
 
         flash('Account created successfully')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.profile_management'))
 
     return render_template('signup.html', form=form, title=title)
 
@@ -81,4 +82,21 @@ def login():
 def profile_management():
     form = InfoForm()
     title = 'Profile'
+    if form.validate_on_submit():
+        # Create a new ClientInformation object and add it to the database
+        new_client = ClientInformation(full_name=form.full_name.data,
+                                       address_1=form.address_1.data,
+                                       address_2=form.address_2.data,
+                                       city=form.city.data,
+                                       state=form.state.data,
+                                       zipcode=form.zipcode.data,
+                                       user_credentials_id=session['user_id'])
+        db.session.add(new_client)
+        db.session.commit()
+
+        # Check that the user_credentials_id attribute was set correctly
+        print(new_client.user_credentials_id)
+
+        flash('Profile information saved successfully')
+        return redirect(url_for('views.login'))
     return render_template('profile_management.html', form=form, title=title)
