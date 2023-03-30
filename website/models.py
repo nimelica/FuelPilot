@@ -6,11 +6,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 db = SQLAlchemy()
 
 class UserCredentials(db.Model):
+    __tablename__ = 'user_credentials'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    client_id = db.Column(db.Integer, db.ForeignKey('client_information.id'))
-
+    client_information = db.relationship('ClientInformation', backref='user_credentials')
+    
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
@@ -22,16 +23,16 @@ class UserCredentials(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
 class ClientInformation(db.Model):
+    __tablename__ = 'client_information'
     id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String(50), nullable=False)
-    address1 = db.Column(db.String(100), nullable=False)
-    address2 = db.Column(db.String(100))
+    address_1 = db.Column(db.String(100), nullable=False)
+    address_2 = db.Column(db.String(100))
     city = db.Column(db.String(100), nullable=False)
     state = db.Column(db.String(2), nullable=False)
     zipcode = db.Column(db.String(9), nullable=False)
-    user_credentials = relationship("UserCredentials", backref="client_information")
+    user_credentials_id = db.Column(db.Integer, db.ForeignKey('user_credentials.id'))
 
 class FuelQuote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
