@@ -1,6 +1,7 @@
 from flask import Blueprint ,render_template, session, flash, redirect, url_for
 from .forms import *
 from .models import *
+from werkzeug.security import generate_password_hash, check_password_hash
 
 views = Blueprint("views",__name__)
 
@@ -49,17 +50,31 @@ def fuel_quote_history():
     return render_template('fuel_quote_history.html', form=form, title=title)
 
 
-@views.route("/login",methods=["GET","POST"])
+# TODO: add user-profile dashboard page
+@views.route("/login", methods=["GET", "POST"])
 def login():
-   form = LoginForm()
-   title = 'Login'
-   #check submission and if login is in database
-   if form.validate_on_submit():
-        #return redirect(url_for('views.home'))
-        return None
-   # todo: check user exist in db
-   # if yes, let signin -> create or go to user page
-   return render_template('login.html', form=form, title=title)
+    form = LoginForm()
+    title = 'Login'
+    # check submission and if login is in database
+    if form.validate_on_submit():
+        # Get the username and password from the form
+        username = form.username.data
+        password = form.password.data
+        
+        # Check if the username exists in the database
+        user = UserCredentials.query.filter_by(username=username).first()
+
+        # If the username exists, check if the password is correct
+        if user and user.check_password(password):
+            # If the password is correct, log the user in and redirect them to the home page
+            session['user_id'] = user.id
+            return redirect(url_for('views.home'))
+        
+        # If the username or password is incorrect, show an error message
+        flash('Invalid username or password', 'error')
+        
+    # Render the login page with the login form
+    return render_template('login.html', form=form, title=title)
 
 
 @views.route("/profile_management", methods=['GET', 'POST'])
