@@ -110,11 +110,7 @@ def profile_management():
         print(new_client.user_credentials_id)
 
         flash('Profile information saved successfully')
-        return redirect(url_for('views.login'))
-    else:
-        for field, errors in form.errors.items():
-            for error in errors:
-                print(f"{field}: {error}")
+        return redirect(url_for('views.home'))
 
     return render_template('profile_management.html', form=form, title=title)
 
