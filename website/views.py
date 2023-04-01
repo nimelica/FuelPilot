@@ -1,4 +1,4 @@
-from flask import Blueprint ,render_template, session, flash, redirect, url_for
+from flask import Blueprint ,render_template, session, flash, redirect, url_for, request
 from .forms import *
 from .models import *
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -82,7 +82,8 @@ def login():
 def profile_management():
     form = InfoForm()
     title = 'Profile'
-    if form.validate_on_submit():
+    # if form.validate_on_submit():
+    if request.method == 'POST':
         # Create a new ClientInformation object and add it to the database
         new_client = ClientInformation(full_name=form.full_name.data,
                                        address_1=form.address_1.data,
