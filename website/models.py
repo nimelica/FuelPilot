@@ -35,6 +35,7 @@ class ClientInformation(db.Model):
     user_credentials_id = db.Column(db.Integer, db.ForeignKey('user_credentials.id'))
 
 class FuelQuote(db.Model):
+    __tablename__ = 'fuel_quote'
     id = db.Column(db.Integer, primary_key=True)
     gallons_requested = db.Column(db.Float, nullable=False)
     delivery_address = db.Column(db.String(200), nullable=False)

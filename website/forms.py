@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField, DateField
 from wtforms.validators import DataRequired, Length, NumberRange, EqualTo
+from .models import *
 
 states = [("AL", "Alabama"), ("AK", "Alaska"), ("AZ", "Arizona"), ("AR", "Arkansas"), ("CA", "California"),
           ("CO", "Colorado"), ("CT", "Connecticut"), ("DE", "Delaware"), ("FL", "Florida"), ("GA", "Georgia"),
@@ -30,6 +31,8 @@ class QuoteFuelForm(FlaskForm):
     suggested_price = IntegerField("Suggested Price / gallon", validators=[DataRequired()], render_kw={'readonly': True})
     total_amount_due = IntegerField("Total Amount Due", validators=[DataRequired()], render_kw={'readonly': True})
     submit = SubmitField("Submit")
+
+
 
 class QuoteFuelHistory(FlaskForm):
     column_names = ['Timestamp',

@@ -1,4 +1,4 @@
-from flask import Blueprint ,render_template, session, flash, redirect, url_for
+from flask import Blueprint ,render_template, session, flash, redirect, url_for, request
 from .forms import *
 from .models import *
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -53,6 +53,20 @@ def signup():
 def fuel_quote_form():
     form = QuoteFuelForm()
     title = 'Quote Form'
+    if request.method == 'POST':
+        # Create a new fuel quote object and add it to the database
+        new_fuel_quote = FuelQuote(gallons_requested=form.gallons_requested.data,
+                                       delivery_address=form.delivery_address.data,
+                                       delivery_date=form.delivery_date.data,
+                                       suggested_price=form.suggested_price.data,
+                                       total_amount_due=form.total_amount_due.data,
+                                       client_id=session['user_id'])
+
+        db.session.add(new_fuel_quote)
+        db.session.commit()
+        # Check that the user_credentials_id attribute was set correctly
+        flash('Fuel Quote Submitted!')
+        return redirect(url_for('views.home'))
     return render_template('fuel_quote_form.html', form=form, title=title)
     
 
@@ -61,7 +75,6 @@ def fuel_quote_history():
     form = QuoteFuelHistory()
     title = 'Quote History'
     return render_template('fuel_quote_history.html', form=form, title=title)
-
 
 # TODO: add user-profile dashboard page
 @views.route("/login", methods=["GET", "POST"])
@@ -94,7 +107,8 @@ def login():
 def profile_management():
     form = InfoForm()
     title = 'Profile'
-    if form.validate_on_submit():
+    # if form.validate_on_submit():
+    if request.method == 'POST':
         # Create a new ClientInformation object and add it to the database
         new_client = ClientInformation(full_name=form.full_name.data,
                                        address_1=form.address_1.data,
