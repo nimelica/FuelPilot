@@ -8,37 +8,37 @@
                 <label for="full_name">{{ form.full_name.label }}</label>
                 {{ form.full_name(class="form-control", size=50) }}
             </div>
-            <div class="form-group">
-                <label for="address_1">{{ form.address_1.label }}</label>
-                {{ form.address_1(class="form-control", size=100) }}
-            </div>
-            <div class="form-group">
-                <label for="address_2">{{ form.address_2.label }}</label>
-                {{ form.address_2(class="form-control", size=100) }}
-            </div>
-            <div class="form-group">
-                <label for="city">{{ form.city.label }}</label>
-                {{ form.city(class="form-control", size=100) }}
-            </div>
-            <div class="form-group">
-                <label for="state">{{ form.state.label }}</label>
-                </br>
-                <label for="state-select">
-                    <select name="state" id="my_select">
-                        {% for option in form.state %}
-                            {% if loop.first %}
-                                <option value="" disabled selected>Select one...</option>
-                            {% endif %}
-                            {{option}}
-                        {% endfor %}
-                    </select>
-                </label>
-            </div>
-            <div class="form-group">
-                <label for="zipcode">{{ form.zipcode.label }}</label>
-                {{ form.zipcode(class="form-control", size=9) }}
-            </div>
-            <input type="submit" value="Save" class="btn btn-secondary">
         </form>
+        <div class="form-group">
+            <label for="address1">{{ form.address_1.label }}</label>
+            {{ form.address_1(class="form-control", size=100) }}
+        </div>
+        <div class="form-group">
+            <label for="address2">{{ form.address_2.label }}</label>
+            {{ form.address_2(class="form-control", size=100) }}
+        </div>
+        <div class="form-group">
+            <label for="city">{{ form.city.label }}</label>
+            {{ form.city(class="form-control", size=100) }}
+        </div>
+        <div class="form-group">
+            <label for="state">{{ form.state.label }}</label>
+            </br>
+            <label for="state-select">
+                <select name="state-select" id="my_select">
+                    {% for option in form.state %}
+                        {% if loop.first %}
+                            <option value="" disabled selected>Select one...</option>
+                        {% endif %}
+                        {{option}}
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="zipcode">{{ form.zipcode.label }}</label>
+            {{ form.zipcode(class="form-control", size=9) }}
+        </div>
+        <input type="submit" value="Save" class="btn btn-secondary">
 </div>
 {% endblock %}

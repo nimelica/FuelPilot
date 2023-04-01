@@ -9,8 +9,19 @@ views = Blueprint("views",__name__)
 def home():
     form = LoginForm()
     title = 'Home'
+    if 'user_id' in session:
+        return render_template('home.html',form=form,title=title)
+    else:
+        return redirect(url_for('views.login'))
     return render_template("home.html",form=form,title=title)
 
+@views.route("/signout", methods=['GET', 'POST'])
+def signout():
+    session.clear()
+    form = LoginForm()
+    title = 'Home'
+    flash('You have sucessfully logged out!')
+    return render_template('home.html',form=form,title=title)
 
 @views.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -25,10 +36,11 @@ def signup():
 
         # Create a new UserCredentials object and add it to the database
         new_user = UserCredentials(username=form.username.data, password=form.password.data)
+
         db.session.add(new_user)
         db.session.commit()
 
-        # Set the user's ID as a session variable so they are logged in
+        #Set the user's ID as a session variable so they are logged in
         session['user_id'] = new_user.id
 
         flash('Account created successfully')
@@ -42,7 +54,7 @@ def fuel_quote_form():
     form = QuoteFuelForm()
     title = 'Quote Form'
     return render_template('fuel_quote_form.html', form=form, title=title)
-
+    
 
 @views.route("/fuel_quote_history", methods=['GET', 'POST'])
 def fuel_quote_history():
@@ -99,5 +111,9 @@ def profile_management():
         print(new_client.user_credentials_id)
 
         flash('Profile information saved successfully')
-        return redirect(url_for('views.login'))
+        return redirect(url_for('views.home'))
+
     return render_template('profile_management.html', form=form, title=title)
+
+
+
