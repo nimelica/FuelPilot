@@ -8,10 +8,6 @@
                 <label for="full_name">{{ form.full_name.label }}</label>
                 {{ form.full_name(class="form-control", size=50) }}
             </div>
-<<<<<<< HEAD
-=======
-        </form>
->>>>>>> 8d432e2987322b835407685c0ebe6f89bca5aee9
         <div class="form-group">
             <label for="address1">{{ form.address_1.label }}</label>
             {{ form.address_1(class="form-control", size=100) }}
@@ -28,11 +24,7 @@
             <label for="state">{{ form.state.label }}</label>
             </br>
             <label for="state-select">
-<<<<<<< HEAD
                 <select name="state" id="my_select">
-=======
-                <select name="state-select" id="my_select">
->>>>>>> 8d432e2987322b835407685c0ebe6f89bca5aee9
                     {% for option in form.state %}
                         {% if loop.first %}
                             <option value="" disabled selected>Select one...</option>
@@ -47,9 +39,6 @@
             {{ form.zipcode(class="form-control", size=9) }}
         </div>
         <input type="submit" value="Save" class="btn btn-secondary">
-<<<<<<< HEAD
     </form>
-=======
->>>>>>> 8d432e2987322b835407685c0ebe6f89bca5aee9
 </div>
 {% endblock %}
