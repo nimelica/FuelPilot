@@ -152,3 +152,7 @@ def profile_management():
 
     return render_template('profile_management.html', form=form, title=title)
 
+@views.route('/fuel_quotes')
+def fuel_quotes():
+    quotes = FuelQuote.query.all()
+    return render_template('fuel_quotes.html', quotes=quotes)
