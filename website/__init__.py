@@ -1,7 +1,6 @@
 from .db_init import init_db
 from flask import Flask
 from os import path, urandom
-from flask_login import LoginManager
 
 def create_app():
     app = Flask(__name__)
