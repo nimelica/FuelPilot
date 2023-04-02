@@ -2,6 +2,7 @@ from flask import Blueprint ,render_template, session, flash, redirect, url_for,
 from .forms import *
 from .models import *
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import or_
 
 views = Blueprint("views",__name__)
 
@@ -97,7 +98,7 @@ def fuel_quote_history():
     for fuel_quote in fuel_quotes: 
          print(fuel_quote.id, fuel_quote.gallons_requested, fuel_quote.delivery_address, fuel_quote.delivery_date, fuel_quote.suggested_price, fuel_quote.total_amount_due)
 
-    return render_template('fuel_quote_history.html', form=form, title=title)
+    return render_template('fuel_quote_history.html', form=form, title=title, fuel_quotes=fuel_quotes)
 
 # TODO: add user-profile dashboard page
 @views.route("/login", methods=["GET", "POST"])
@@ -151,5 +152,7 @@ def profile_management():
 
     return render_template('profile_management.html', form=form, title=title)
 
-
-
+@views.route('/fuel_quotes')
+def fuel_quotes():
+    quotes = FuelQuote.query.all()
+    return render_template('fuel_quotes.html', quotes=quotes)
