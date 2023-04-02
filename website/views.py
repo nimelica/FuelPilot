@@ -152,6 +152,7 @@ def profile_management():
 
     return render_template('profile_management.html', form=form, title=title)
 
+<<<<<<< HEAD
 #@views.route('/fuel_quote_table')
 #def fuel_quote_table():
 #    fuel_quotes = FuelQuote.query.all()
@@ -166,3 +167,7 @@ from models import FuelQuote
 def fuel_quotes():
     quotes = FuelQuote.query.all()
     return render_template('fuel_quotes.html', quotes=quotes)
+=======
+
+
+>>>>>>> 8d432e2987322b835407685c0ebe6f89bca5aee9
