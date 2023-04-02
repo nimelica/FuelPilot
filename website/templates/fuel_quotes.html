@@ -1,0 +1,34 @@
+<!-- fuel_quotes.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Fuel Quotes</h1>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Gallons Requested</th>
+        <th>Delivery Address</th>
+        <th>Delivery Date</th>
+        <th>Suggested Price</th>
+        <th>Total Amount Due</th>
+        <th>Client ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for quote in quotes %}
+        <tr>
+          <td>{{ quote.id }}</td>
+          <td>{{ quote.gallons_requested }}</td>
+          <td>{{ quote.delivery_address }}</td>
+          <td>{{ quote.delivery_date }}</td>
+          <td>{{ quote.suggested_price }}</td>
+          <td>{{ quote.total_amount_due }}</td>
+          <td>{{ quote.client_id }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

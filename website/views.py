@@ -2,6 +2,7 @@ from flask import Blueprint ,render_template, session, flash, redirect, url_for,
 from .forms import *
 from .models import *
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import or_
 
 views = Blueprint("views",__name__)
 
@@ -151,5 +152,17 @@ def profile_management():
 
     return render_template('profile_management.html', form=form, title=title)
 
+#@views.route('/fuel_quote_table')
+#def fuel_quote_table():
+#    fuel_quotes = FuelQuote.query.all()
+#    return render_template('fuel_quote_table.html', fuel_quotes=fuel_quotes)
+
+from flask import render_template, request
+from sqlalchemy import or_
+from models import FuelQuote
 
 
+@views.route('/fuel_quotes')
+def fuel_quotes():
+    quotes = FuelQuote.query.all()
+    return render_template('fuel_quotes.html', quotes=quotes)
