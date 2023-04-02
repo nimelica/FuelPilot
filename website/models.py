@@ -35,6 +35,7 @@ class ClientInformation(db.Model):
     user_credentials_id = db.Column(db.Integer, db.ForeignKey('user_credentials.id'))
 
 class FuelQuote(db.Model):
+    __tablename__ = 'fuel_quote'
     id = db.Column(db.Integer, primary_key=True)
     gallons_requested = db.Column(db.Float, nullable=False)
     delivery_address = db.Column(db.String(200), nullable=False)
@@ -42,3 +43,14 @@ class FuelQuote(db.Model):
     suggested_price = db.Column(db.Float)
     total_amount_due = db.Column(db.Float)
     client_id = db.Column(db.Integer, db.ForeignKey('client_information.id'))
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'gallons_requested': self.gallons_requested,
+            'delivery_address': self.delivery_address,
+            'delivery_date': self.delivery_date.date().isoformat(),  # format to YYYY-MM-DD
+            'suggested_price': self.suggested_price,
+            'total_amount_due': self.total_amount_due,
+            'client_id': self.client_id
+        }

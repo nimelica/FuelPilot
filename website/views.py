@@ -9,8 +9,19 @@ views = Blueprint("views",__name__)
 def home():
     form = LoginForm()
     title = 'Home'
+    if 'user_id' in session:
+        return render_template('home.html',form=form,title=title)
+    else:
+        return redirect(url_for('views.login'))
     return render_template("home.html",form=form,title=title)
 
+@views.route("/signout", methods=['GET', 'POST'])
+def signout():
+    session.clear()
+    form = LoginForm()
+    title = 'Home'
+    flash('You have sucessfully logged out!')
+    return render_template('home.html',form=form,title=title)
 
 @views.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -25,10 +36,11 @@ def signup():
 
         # Create a new UserCredentials object and add it to the database
         new_user = UserCredentials(username=form.username.data, password=form.password.data)
+
         db.session.add(new_user)
         db.session.commit()
 
-        # Set the user's ID as a session variable so they are logged in
+        #Set the user's ID as a session variable so they are logged in
         session['user_id'] = new_user.id
 
         flash('Account created successfully')
@@ -41,15 +53,28 @@ def signup():
 def fuel_quote_form():
     form = QuoteFuelForm()
     title = 'Quote Form'
-    return render_template('fuel_quote_form.html', form=form, title=title)
+    if request.method == 'POST':
+        # Create a new fuel quote object and add it to the database
+        new_fuel_quote = FuelQuote(gallons_requested=form.gallons_requested.data,
+                                       delivery_address=form.delivery_address.data,
+                                       delivery_date=form.delivery_date.data,
+                                       suggested_price=form.suggested_price.data,
+                                       total_amount_due=form.total_amount_due.data,
+                                       client_id=session['user_id'])
 
+        db.session.add(new_fuel_quote)
+        db.session.commit()
+        # Check that the user_credentials_id attribute was set correctly
+        flash('Fuel Quote Submitted!')
+        return redirect(url_for('views.home'))
+    return render_template('fuel_quote_form.html', form=form, title=title)
+    
 
 @views.route("/fuel_quote_history", methods=['GET', 'POST'])
 def fuel_quote_history():
     form = QuoteFuelHistory()
     title = 'Quote History'
     return render_template('fuel_quote_history.html', form=form, title=title)
-
 
 # TODO: add user-profile dashboard page
 @views.route("/login", methods=["GET", "POST"])
@@ -99,5 +124,9 @@ def profile_management():
         print(new_client.user_credentials_id)
 
         flash('Profile information saved successfully')
-        return redirect(url_for('views.login'))
+        return redirect(url_for('views.home'))
+
     return render_template('profile_management.html', form=form, title=title)
+
+
+
