@@ -118,7 +118,8 @@ def login():
         if user and user.check_password(password):
             # If the password is correct, log the user in and redirect them to the home page
             session['user_id'] = user.id
-            return redirect(url_for('views.home'))
+            print("here")
+            return redirect(url_for('views.fuel_quote_form'))
         
         # If the username or password is incorrect, show an error message
         flash('Invalid username or password', 'error')
