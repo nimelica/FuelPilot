@@ -79,7 +79,7 @@ def fuel_quote_history():
 
     # THIS IS HOW WE GET THE DATA FROM DATABASE 
     fuel_quotes = FuelQuote.query.filter_by(client_id=user_id).all()
- 
+ '''
     # WE CAN CONVERT EACH OF THEM INTO LISTS SEPERATELY
     gallons_requested_list = [quote.gallons_requested for quote in fuel_quotes]
     delivery_address_list = [quote.delivery_address for quote in fuel_quotes]
@@ -93,7 +93,7 @@ def fuel_quote_history():
 
     # OR JUST GET IT AS AN OBJECT
     print(fuel_quotes)
-
+'''
     # IN HTML JINJA TEMPLATES WE CAN ACCESS THEM AS
     for fuel_quote in fuel_quotes: 
          print(fuel_quote.id, fuel_quote.gallons_requested, fuel_quote.delivery_address, fuel_quote.delivery_date, fuel_quote.suggested_price, fuel_quote.total_amount_due)
