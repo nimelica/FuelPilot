@@ -28,11 +28,9 @@ class QuoteFuelForm(FlaskForm):
     gallons_requested = IntegerField("Gallons Requested", validators=[DataRequired(), NumberRange(min=1)])
     delivery_address = StringField("Delivery Address", validators=[DataRequired()])
     delivery_date = DateField("Delivery Date", validators=[DataRequired()])
-    suggested_price = IntegerField("Suggested Price / gallon", validators=[DataRequired()])
-    total_amount_due = IntegerField("Total Amount Due", validators=[DataRequired()])
+    suggested_price = IntegerField("Suggested Price / gallon", validators=[DataRequired()], render_kw={"readonly": True})
+    total_amount_due = IntegerField("Total Amount Due", validators=[DataRequired()], render_kw={"readonly": True})
     submit = SubmitField("Submit")
-
-
 
 class QuoteFuelHistory(FlaskForm):
     column_names = ['Timestamp',
