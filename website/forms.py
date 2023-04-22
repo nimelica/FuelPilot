@@ -31,6 +31,8 @@ class QuoteFuelForm(FlaskForm):
     suggested_price = IntegerField("Suggested Price / gallon", validators=[DataRequired()], render_kw={"readonly": True})
     total_amount_due = IntegerField("Total Amount Due", validators=[DataRequired()], render_kw={"readonly": True})
     submit = SubmitField("Submit")
+    get_quote = SubmitField("Get Quote", render_kw={"disabled": True})
+
 
 class QuoteFuelHistory(FlaskForm):
     column_names = ['Timestamp',
