@@ -5,8 +5,11 @@
         <form method="POST">
             {{ form.hidden_tag() }}
             <div class="form-group">
-                <label for="gallons_requested">{{ form.gallons_requested.label }}</label>
-                {{ form.gallons_requested(class="form-control", size=32) }}
+                <label for="num_of_gallons_requested">Number of Gallons Requested:</label>
+                <input type="number" class="form-control" name="num_of_gallons_requested" id="num_of_gallons_requested">
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" id="get_quote_button" disabled>Get Quote</button>
             </div>
             <div class="form-group">
                 <label for="delivery_address">{{ form.delivery_address.label }}</label>
@@ -27,4 +30,24 @@
             <input type="submit" value="Submit" class="btn btn-secondary">
         </form>
 </div>
-{% endblock %}
+
+<script>
+    const num_of_gallons_requested = document.querySelector('#num_of_gallons_requested');
+    const get_quote_button = document.querySelector('#get_quote_button');
+
+    num_of_gallons_requested.addEventListener('change', (event) => {
+        if (event.target.value) {
+            get_quote_button.disabled = false;
+        } else {
+            get_quote_button.disabled = true;
+        }
+    });
+
+    get_quote_button.addEventListener('click', () => {
+        const num_of_gallons_requested = document.querySelector('#num_of_gallons_requested').value;
+        const delivery_address = document.querySelector('#delivery_address').value;
+        const delivery_date = document.querySelector('#delivery_date').value;
+
+        // Compute suggested_price and total_amount_due
+        const suggested_price = 1.50 + (0.02 - 0.01 + 0.02 + 0.10) * 1.50;
+        const total_amount_due = num
