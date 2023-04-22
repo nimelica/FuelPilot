@@ -54,6 +54,37 @@ def signup():
 def fuel_quote_form():
     form = QuoteFuelForm()
     title = 'Quote Form'
+    user_id = session.get('user_id')
+
+    # Pricing Module
+    client_information = ClientInformation.query.filter_by(user_credentials_id=user_id).all()
+    Location_Factor = 0.02
+    if client_information[0].state != 'TX':
+        Location_Factor = 0.04
+    print('Location_Factor:', Location_Factor)
+    fuel_quotes = FuelQuote.query.filter_by(client_id=user_id).all()
+    # print('fuel_quotes:', fuel_quotes)
+    Rate_History_Factor = 0.00
+    if len(fuel_quotes) != 0:
+        Rate_History_Factor = 0.01
+    print('Rate_History_Factor:', Rate_History_Factor)
+    # TODO: Retrieve gallons requested somehow
+    Gallons_Requested_Factor = 0.02
+
+    Company_Profit_Factor = 0.10
+    print('Company_Profit_Factor:', Company_Profit_Factor)
+    Current_Price_Per_Gallon = 1.50
+    print('Current_Price_Per_Gallon:', Current_Price_Per_Gallon)
+    Margin = Current_Price_Per_Gallon * (Location_Factor - Rate_History_Factor + Gallons_Requested_Factor + Company_Profit_Factor)
+    print('Margin:', Margin)
+    Suggested_Price_Per_Gallon = Current_Price_Per_Gallon + Margin
+    print('Suggested_Price_Per_Gallon', Suggested_Price_Per_Gallon)
+    # TODO: Retrieve gallons requested somehow
+    # Total_Amount_Due = '''AMOUNT OF GALLONS''' * Suggested_Price_Per_Gallon
+
+
+
+
     if request.method == 'POST':
         # Create a new fuel quote object and add it to the database
         new_fuel_quote = FuelQuote(gallons_requested=form.gallons_requested.data,
