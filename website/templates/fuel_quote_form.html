@@ -28,6 +28,31 @@
         <button type="submit" name="get_quote" class="btn btn-secondary" id="get-quote-btn" {% if not form.gallons_requested.data or not form.delivery_address.data %} disabled {% endif %}>Get Quote</button>
     </form>
 </div>
+<script>
+    // Get the input field and button
+    const gallonsRequested = document.getElementById("gallons_requested");
+    const deliveryAddress = document.getElementById("delivery_address");
+    const getQuoteBtn = document.getElementById("get-quote-btn");
 
+    // Disable the button by default
+    getQuoteBtn.disabled = true;
+
+    // Add an event listener to the input fields to enable/disable the button
+    gallonsRequested.addEventListener("input", function () {
+        if (gallonsRequested.value.trim() && deliveryAddress.value.trim()) {
+            getQuoteBtn.disabled = false;
+        } else {
+            getQuoteBtn.disabled = true;
+        }
+    });
+
+    deliveryAddress.addEventListener("input", function () {
+        if (gallonsRequested.value.trim() && deliveryAddress.value.trim()) {
+            getQuoteBtn.disabled = false;
+        } else {
+            getQuoteBtn.disabled = true;
+        }
+    });
+</script>
 {% endblock %}
 
