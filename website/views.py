@@ -12,7 +12,9 @@ def home():
     form = LoginForm()
     title = 'Home'
     if 'user_id' in session:
-        return render_template('home.html',form=form,title=title)
+        user_id = session.get('user_id')
+        form = ClientInformation.query.filter_by(user_credentials_id=user_id).first()
+        return render_template('profile.html',form=form,title=title)
     else:
         return redirect(url_for('views.login'))
     return render_template("home.html",form=form,title=title)
@@ -23,7 +25,7 @@ def signout():
     form = LoginForm()
     title = 'Home'
     flash('You have sucessfully logged out!')
-    return render_template('home.html',form=form,title=title)
+    return  redirect(url_for('views.home'))
 
 @views.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -58,26 +60,29 @@ def fuel_quote_form():
     user_id = session.get('user_id')
 
     if request.method == 'POST':
-        if request.form.get('get_quote') == 'GET_QUOTE':
-            # Pricing Module
-            client_information = ClientInformation.query.filter_by(user_credentials_id=user_id).all()
-            if len(client_information) != 0:
-                form.suggested_price.data, form.total_amount_due.data = calculatePricing(form.gallons_requested.data, client_information[0].state)
-                return render_template('fuel_quote_form.html', form=form, title=title)
-        elif request.form.get('submit') == 'SUBMIT':
-            # Create a new fuel quote object and add it to the database
-            new_fuel_quote = FuelQuote(gallons_requested=form.gallons_requested.data,
-                                            delivery_address=form.delivery_address.data,
-                                            delivery_date=form.delivery_date.data,
-                                            suggested_price=form.suggested_price.data,
-                                            total_amount_due=form.total_amount_due.data,
-                                            client_id=session['user_id'])
+        if 'user_id' in session:
+            if request.form.get('get_quote') == 'GET_QUOTE':
+                # Pricing Module
+                client_information = ClientInformation.query.filter_by(user_credentials_id=user_id).all()
+                if len(client_information) != 0:
+                    form.suggested_price.data, form.total_amount_due.data = calculatePricing(form.gallons_requested.data, client_information[0].state)
+                    return render_template('fuel_quote_form.html', form=form, title=title)
+            elif request.form.get('submit') == 'SUBMIT':
+                # Create a new fuel quote object and add it to the database
+                new_fuel_quote = FuelQuote(gallons_requested=form.gallons_requested.data,
+                                                delivery_address=form.delivery_address.data,
+                                                delivery_date=form.delivery_date.data,
+                                                suggested_price=form.suggested_price.data,
+                                                total_amount_due=form.total_amount_due.data,
+                                                client_id=session['user_id'])
 
-            db.session.add(new_fuel_quote)
-            db.session.commit()
-            # Check that the user_credentials_id attribute was set correctly
-            flash('Fuel Quote Submitted!')
-            return redirect(url_for('views.home'))
+                db.session.add(new_fuel_quote)
+                db.session.commit()
+                # Check that the user_credentials_id attribute was set correctly
+                flash('Fuel Quote Submitted!')
+                return redirect(url_for('views.home'))
+        else:
+            flash('Error user has not logged in, Please Login to submit a Fuel Quote.', "error")
     return render_template('fuel_quote_form.html', form=form, title=title)
     
 
@@ -126,7 +131,6 @@ def login():
         if user and user.check_password(password):
             # If the password is correct, log the user in and redirect them to the home page
             session['user_id'] = user.id
-            print("here")
             return redirect(url_for('views.fuel_quote_form'))
         
         # If the username or password is incorrect, show an error message
