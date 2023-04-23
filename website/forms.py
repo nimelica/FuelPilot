@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField, DateField
+from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField, DateField, FloatField
 from wtforms.validators import DataRequired, Length, NumberRange, EqualTo
 from .models import *
 
@@ -26,11 +26,13 @@ class InfoForm(FlaskForm):
 
 class QuoteFuelForm(FlaskForm):
     gallons_requested = IntegerField("Gallons Requested", validators=[DataRequired(), NumberRange(min=1)])
-    delivery_address = StringField("Delivery Address", validators=[DataRequired()], render_kw={'readonly': True})
+    delivery_address = StringField("Delivery Address", validators=[DataRequired()])
     delivery_date = DateField("Delivery Date", validators=[DataRequired()])
-    suggested_price = IntegerField("Suggested Price / gallon", validators=[DataRequired()], render_kw={'readonly': True})
-    total_amount_due = IntegerField("Total Amount Due", validators=[DataRequired()], render_kw={'readonly': True})
+    suggested_price = FloatField("Suggested Price / gallon", validators=[DataRequired()], render_kw={"readonly": True})
+    total_amount_due = FloatField("Total Amount Due", validators=[DataRequired()], render_kw={"readonly": True})
     submit = SubmitField("Submit")
+    get_quote = SubmitField("Get Quote", render_kw={"disabled": True})
+
 
 
 

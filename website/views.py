@@ -2,6 +2,8 @@ from flask import Blueprint ,render_template, session, flash, redirect, url_for,
 from .forms import *
 from .models import *
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import or_
+from .price_calc import calculatePricing
 
 views = Blueprint("views",__name__)
 
@@ -53,20 +55,29 @@ def signup():
 def fuel_quote_form():
     form = QuoteFuelForm()
     title = 'Quote Form'
-    if request.method == 'POST':
-        # Create a new fuel quote object and add it to the database
-        new_fuel_quote = FuelQuote(gallons_requested=form.gallons_requested.data,
-                                       delivery_address=form.delivery_address.data,
-                                       delivery_date=form.delivery_date.data,
-                                       suggested_price=form.suggested_price.data,
-                                       total_amount_due=form.total_amount_due.data,
-                                       client_id=session['user_id'])
+    user_id = session.get('user_id')
 
-        db.session.add(new_fuel_quote)
-        db.session.commit()
-        # Check that the user_credentials_id attribute was set correctly
-        flash('Fuel Quote Submitted!')
-        return redirect(url_for('views.home'))
+    if request.method == 'POST':
+        if request.form.get('get_quote') == 'GET_QUOTE':
+            # Pricing Module
+            client_information = ClientInformation.query.filter_by(user_credentials_id=user_id).all()
+            if len(client_information) != 0:
+                form.suggested_price.data, form.total_amount_due.data = calculatePricing(form.gallons_requested.data, client_information[0].state)
+                return render_template('fuel_quote_form.html', form=form, title=title)
+        elif request.form.get('submit') == 'SUBMIT':
+            # Create a new fuel quote object and add it to the database
+            new_fuel_quote = FuelQuote(gallons_requested=form.gallons_requested.data,
+                                            delivery_address=form.delivery_address.data,
+                                            delivery_date=form.delivery_date.data,
+                                            suggested_price=form.suggested_price.data,
+                                            total_amount_due=form.total_amount_due.data,
+                                            client_id=session['user_id'])
+
+            db.session.add(new_fuel_quote)
+            db.session.commit()
+            # Check that the user_credentials_id attribute was set correctly
+            flash('Fuel Quote Submitted!')
+            return redirect(url_for('views.home'))
     return render_template('fuel_quote_form.html', form=form, title=title)
     
 
@@ -74,7 +85,28 @@ def fuel_quote_form():
 def fuel_quote_history():
     form = QuoteFuelHistory()
     title = 'Quote History'
-    return render_template('fuel_quote_history.html', form=form, title=title)
+    user_id = session.get('user_id')
+
+    # THIS IS HOW WE GET THE DATA FROM DATABASE 
+    fuel_quotes = FuelQuote.query.filter_by(client_id=user_id).all()
+    '''
+    # WE CAN CONVERT EACH OF THEM INTO LISTS SEPERATELY
+    gallons_requested_list = [quote.gallons_requested for quote in fuel_quotes]
+    delivery_address_list = [quote.delivery_address for quote in fuel_quotes]
+    delivery_date_list = [quote.delivery_date.strftime("%Y-%m-%d") for quote in fuel_quotes]
+    suggested_price_list = [quote.suggested_price for quote in fuel_quotes]
+    total_amount_due_list = [quote.total_amount_due for quote in fuel_quotes]
+    # EXAMPLE
+    print(gallons_requested_list)
+    print(delivery_address_list)
+    # OR JUST GET IT AS AN OBJECT
+    print(fuel_quotes)
+    '''
+    # IN HTML JINJA TEMPLATES WE CAN ACCESS THEM AS
+    for fuel_quote in fuel_quotes: 
+         print(fuel_quote.id, fuel_quote.gallons_requested, fuel_quote.delivery_address, fuel_quote.delivery_date, fuel_quote.suggested_price, fuel_quote.total_amount_due)
+
+    return render_template('fuel_quote_history.html', form=form, title=title, fuel_quotes=fuel_quotes)
 
 # TODO: add user-profile dashboard page
 @views.route("/login", methods=["GET", "POST"])
@@ -94,7 +126,8 @@ def login():
         if user and user.check_password(password):
             # If the password is correct, log the user in and redirect them to the home page
             session['user_id'] = user.id
-            return redirect(url_for('views.home'))
+            print("here")
+            return redirect(url_for('views.fuel_quote_form'))
         
         # If the username or password is incorrect, show an error message
         flash('Invalid username or password', 'error')
@@ -127,6 +160,3 @@ def profile_management():
         return redirect(url_for('views.home'))
 
     return render_template('profile_management.html', form=form, title=title)
-
-
-

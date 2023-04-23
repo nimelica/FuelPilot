@@ -2,29 +2,65 @@
 
 {% block content %}
 <div class="shadow p-3 mb-5 bg-body rounded">
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                <label for="gallons_requested">{{ form.gallons_requested.label }}</label>
-                {{ form.gallons_requested(class="form-control", size=32) }}
-            </div>
-            <div class="form-group">
-                <label for="delivery_address">{{ form.delivery_address.label }}</label>
-                {{ form.delivery_address(class="form-control", size=32) }}
-            </div>
-            <div class="form-group">
-                <label for="delivery_date">{{ form.delivery_date.label }}</label>
-                {{ form.delivery_date(class="form-control", size=32) }}
-            </div>
-            <div class="form-group">
-                <label for="suggested_price">{{ form.suggested_price.label }}</label>
-                {{ form.suggested_price(class="form-control", size=32) }}
-            </div>
-            <div class="form-group">
-                <label for="total_amount_due">{{ form.total_amount_due.label }}</label>
-                {{ form.total_amount_due(class="form-control", size=32) }}
-            </div>            
-            <input type="submit" value="Submit" class="btn btn-secondary">
-        </form>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="gallons_requested">{{ form.gallons_requested.label }}</label>
+            {{ form.gallons_requested(class="form-control", size=32) }}
+        </div>
+        <div class="form-group">
+            <label for="delivery_address">{{ form.delivery_address.label }}</label>
+            {{ form.delivery_address(class="form-control", size=32) }}
+        </div>
+        <div class="form-group">
+            <label for="delivery_date">{{ form.delivery_date.label }}</label>
+            {{ form.delivery_date(class="form-control", size=32) }}
+        </div>
+        <div class="form-group">
+            <label for="suggested_price">{{ form.suggested_price.label }}</label>
+            {% if form.suggested_price.data %}
+                <input id="suggested_price" name="suggested_price" readonly required type="number" value="{{ form.suggested_price.data }}", class="form-control", size=32>
+            {% else %}
+                {{ form.suggested_price(class="form-control", size=32, readonly=True) }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="total_amount_due">{{ form.total_amount_due.label }}</label>
+            {% if form.total_amount_due.data %}
+                <input id="total_amount_due" name="total_amount_due" readonly required type="number" value="{{ form.total_amount_due.data }}", class="form-control", size=32>
+            {% else %}
+                {{ form.total_amount_due(class="form-control", size=32, readonly=True) }}
+            {% endif %}
+        </div>
+        <button type="submit" name="submit" value="SUBMIT" class="btn btn-secondary" {% if form.get_quote.disabled %} disabled {% endif %}>Submit</button>
+        <button type="submit" name="get_quote" value="GET_QUOTE" class="btn btn-secondary" id="get-quote-btn" {% if not form.gallons_requested.data or not form.delivery_address.data %} disabled {% endif %}>Get Quote</button>
+    </form>
 </div>
+<script>
+    // Get the input field and button
+    const gallonsRequested = document.getElementById("gallons_requested");
+    const deliveryAddress = document.getElementById("delivery_address");
+    const getQuoteBtn = document.getElementById("get-quote-btn");
+
+    // Disable the button by default
+    getQuoteBtn.disabled = true;
+
+    // Add an event listener to the input fields to enable/disable the button
+    gallonsRequested.addEventListener("input", function () {
+        if (gallonsRequested.value.trim() && deliveryAddress.value.trim()) {
+            getQuoteBtn.disabled = false;
+        } else {
+            getQuoteBtn.disabled = true;
+        }
+    });
+
+    deliveryAddress.addEventListener("input", function () {
+        if (gallonsRequested.value.trim() && deliveryAddress.value.trim()) {
+            getQuoteBtn.disabled = false;
+        } else {
+            getQuoteBtn.disabled = true;
+        }
+    });
+</script>
 {% endblock %}
+
