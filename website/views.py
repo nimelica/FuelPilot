@@ -1,9 +1,11 @@
 from flask import Blueprint ,render_template, session, flash, redirect, url_for, request
+from flask_login import login_required
 from .forms import *
 from .models import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import or_
 from .price_calc import calculatePricing
+
 
 views = Blueprint("views",__name__)
 
@@ -162,3 +164,14 @@ def profile_management():
         return redirect(url_for('views.home'))
 
     return render_template('profile_management.html', form=form, title=title)
+
+@views.route("/dashboard", methods=["GET", "POST"])
+def dashboard():
+    client_info = ClientInformation.query.filter_by(user_credentials_id=session['user_id']).first()
+    form = EditForm(obj=client_info)
+    if form.validate_on_submit():
+        form.populate_obj(client_info)
+        db.session.commit()
+        flash("Profile information updated successfully.")
+        return redirect(url_for('views.dashboard'))
+    return render_template('dashboard.html', client_info=client_info, form=form)
