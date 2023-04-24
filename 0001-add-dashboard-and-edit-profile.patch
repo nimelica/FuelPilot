@@ -1,0 +1,176 @@
+From 42467a069293d2c9d06a4ae4665fba64e9ee9af6 Mon Sep 17 00:00:00 2001
+From: henrychen71 <henrychen71@gmail.com>
+Date: Mon, 24 Apr 2023 13:33:33 -0500
+Subject: [PATCH] add dashboard and edit profile
+
+---
+ dummy                                 |  1 +
+ website/forms.py                      | 10 ++++++++
+ website/templates/client_profile.html | 35 +++++++++++++++++++++++++++
+ website/templates/dashboard.html      | 31 ++++++++++++++++++++++++
+ website/templates/navbar.html         |  4 +--
+ website/views.py                      | 13 ++++++++++
+ 6 files changed, 91 insertions(+), 3 deletions(-)
+ create mode 160000 dummy
+ create mode 100644 website/templates/client_profile.html
+ create mode 100644 website/templates/dashboard.html
+
+diff --git a/dummy b/dummy
+new file mode 160000
+index 0000000..6e5c2a2
+--- /dev/null
++++ b/dummy
+@@ -0,0 +1 @@
++Subproject commit 6e5c2a2a47f6ac5632328b3f64f75f82621a875d
+diff --git a/website/forms.py b/website/forms.py
+index f761500..e0ecce6 100644
+--- a/website/forms.py
++++ b/website/forms.py
+@@ -57,6 +57,16 @@ class LoginForm(FlaskForm):
+     username = StringField("Username: ", validators=[DataRequired()])
+     password = PasswordField("Password: ", validators=[DataRequired()])
+     submit = SubmitField("Login")
++    
++
++class EditForm(FlaskForm):
++    full_name = StringField("Full Name", validators=[DataRequired(), Length(max=50)])
++    address_1 = StringField("Address 1", validators=[DataRequired(), Length(max=100)])
++    address_2 = StringField("Address 2", validators=[Length(max=100)])
++    city = StringField("City", validators=[DataRequired(), Length(max=100)])
++    state = SelectField("State", validators=[DataRequired()], choices=[_[0] for _ in states])
++    zipcode = StringField("Zipcode", validators=[DataRequired(), Length(min=5, max=9)])
++    submit = SubmitField("Save")
+ 
+ 
+ 
+diff --git a/website/templates/client_profile.html b/website/templates/client_profile.html
+new file mode 100644
+index 0000000..2c3a678
+--- /dev/null
++++ b/website/templates/client_profile.html
+@@ -0,0 +1,35 @@
++{% extends "base.html" %}
++
++{% block content %}
++  <h1>Client Profile</h1>
++  <h2>{{ client.full_name }}</h2>
++  <p>{{ client.address_1 }}</p>
++  {% if client.address_2 %}
++    <p>{{ client.address_2 }}</p>
++  {% endif %}
++  <p>{{ client.city }}, {{ client.state }} {{ client.zipcode }}</p>
++  <hr>
++  <form method="POST" action="{{ url_for('update_client', client_id=client.id) }}">
++    {{ form.csrf_token }}
++    {{ form.hidden_tag() }}
++    <div class="form-group">
++      {{ form.full_name.label }} {{ form.full_name() }}
++    </div>
++    <div class="form-group">
++      {{ form.address_1.label }} {{ form.address_1() }}
++    </div>
++    <div class="form-group">
++      {{ form.address_2.label }} {{ form.address_2() }}
++    </div>
++    <div class="form-group">
++      {{ form.city.label }} {{ form.city() }}
++    </div>
++    <div class="form-group">
++      {{ form.state.label }} {{ form.state() }}
++    </div>
++    <div class="form-group">
++      {{ form.zipcode.label }} {{ form.zipcode() }}
++    </div>
++    <button type="submit" class="btn btn-primary">Save</button>
++  </form>
++{% endblock %}
+\ No newline at end of file
+diff --git a/website/templates/dashboard.html b/website/templates/dashboard.html
+new file mode 100644
+index 0000000..10a3aa9
+--- /dev/null
++++ b/website/templates/dashboard.html
+@@ -0,0 +1,31 @@
++{% extends "base.html" %}
++
++{% block content %}
++    <h1>Dashboard</h1>
++    <p>Welcome, {{ client_info.full_name }}!</p>
++
++    <h2>Profile Information</h2>
++    {% if client_info %}
++        <p>Full Name: {{ client_info.full_name }}</p>
++        <p>Address 1: {{ client_info.address_1 }}</p>
++        <p>Address 2: {{ client_info.address_2 }}</p>
++        <p>City: {{ client_info.city }}</p>
++        <p>State: {{ client_info.state }}</p>
++        <p>Zipcode: {{ client_info.zipcode }}</p>
++
++        <h2>Edit Profile Information</h2>
++        <form method="POST">
++            {{ form.csrf_token }}
++            {{ form.hidden_tag() }}
++            {{ form.full_name.label }} {{ form.full_name }}
++            {{ form.address_1.label }} {{ form.address_1 }}
++            {{ form.address_2.label }} {{ form.address_2 }}
++            {{ form.city.label }} {{ form.city }}
++            {{ form.state.label }} {{ form.state }}
++            {{ form.zipcode.label }} {{ form.zipcode }}
++            {{ form.submit }}
++        </form>
++    {% else %}
++        <p>No profile information available.</p>
++    {% endif %}
++{% endblock %}
+\ No newline at end of file
+diff --git a/website/templates/navbar.html b/website/templates/navbar.html
+index 913e3be..03ffaf2 100644
+--- a/website/templates/navbar.html
++++ b/website/templates/navbar.html
+@@ -10,9 +10,7 @@
+           <li class="nav-item">
+             <a class="nav-link" href="{{ url_for('views.signup')}}">Register</a>
+           </li>
+-          <li class="nav-item">
+-            <a class="nav-link" href="{{ url_for('views.login')}}">Login</a>
+-          </li>
++
+           <li class="nav-item">
+             <a class="nav-link" href="{{ url_for('views.profile_management')}}">Profile</a>
+           </li>
+diff --git a/website/views.py b/website/views.py
+index 23ff419..4e3df5f 100644
+--- a/website/views.py
++++ b/website/views.py
+@@ -1,10 +1,12 @@
+ from flask import Blueprint ,render_template, session, flash, redirect, url_for, request
++from flask_login import login_required
+ from .forms import *
+ from .models import *
+ from werkzeug.security import generate_password_hash, check_password_hash
+ from sqlalchemy import or_
+ from .price_calc import calculatePricing
+ 
++
+ views = Blueprint("views",__name__)
+ 
+ @views.route("/", methods=['GET','POST'])
+@@ -162,3 +164,14 @@ def profile_management():
+         return redirect(url_for('views.home'))
+ 
+     return render_template('profile_management.html', form=form, title=title)
++
++@views.route("/dashboard", methods=["GET", "POST"])
++def dashboard():
++    client_info = ClientInformation.query.filter_by(user_credentials_id=session['user_id']).first()
++    form = EditForm(obj=client_info)
++    if form.validate_on_submit():
++        form.populate_obj(client_info)
++        db.session.commit()
++        flash("Profile information updated successfully.")
++        return redirect(url_for('views.dashboard'))
++    return render_template('dashboard.html', client_info=client_info, form=form)
+\ No newline at end of file
+-- 
+2.32.1 (Apple Git-133)
+
