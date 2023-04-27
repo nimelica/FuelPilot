@@ -166,20 +166,6 @@ def profile_management():
     return render_template('profile_management.html', form=form, title=title)
 
 
-"""
-@views.route("/dashboard", methods=["GET", "POST"])
-def dashboard():
-    client_info = ClientInformation.query.filter_by(user_credentials_id=session['user_id']).first()
-    form = EditForm(obj=client_info)
-    if form.validate_on_submit():
-        form.populate_obj(client_info)
-        db.session.commit()
-        flash("Profile information updated successfully.")
-        return redirect(url_for('views.dashboard'))
-    return render_template('dashboard.html', client_info=client_info, form=form)
-    
-
-    """
     
 @views.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
