@@ -144,6 +144,10 @@ def login():
 def profile_management():
     form = InfoForm()
     title = 'Profile'
+    if 'user_id' not in session:
+        flash('You must sign in before accessing Profile.')
+        return redirect(url_for('views.login'))
+    
     client_info = ClientInformation.query.filter_by(user_credentials_id=session['user_id']).first()
     client_information = ClientInformation.query.filter_by(user_credentials_id=session['user_id']).all()
     # if form.validate_on_submit():
