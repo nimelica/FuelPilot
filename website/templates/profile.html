@@ -6,29 +6,46 @@
       <h1 class="text-center">Welcome {{form.full_name}}!</h1>
     </header>
     <section class="address-info">
-      <h2>Address Information</h2>
-      <ul>
-        <li>
-          <h3>Main Address:</h3>
-          <p>{{ form.address_1 }}</p>
-        </li>
-        <li>
-          <h3>Alternative Address:</h3>
-          <p>{{ form.address_2 }}</p>
-        </li>
-        <li>
-          <h3>City:</h3>
-          <p>{{ form.city }}</p>
-        </li>
-        <li>
-          <h3>State:</h3>
-          <p>{{ form.state }}</p>
-        </li>
-        <li>
-          <h3>Zipcode:</h3>
-          <p>{{ form.zipcode }}</p>
-        </li>
-      </ul>
+      <h2 class="text-primary">Address Information</h2>
+      <table class="table">
+        <tr>
+          <td><h3>Address 1:</h3></td>
+          <td><p>{{ form.address_1 }}</p></td>
+        </tr>
+        <tr>
+          <td><h3>Address 2:</h3></td>
+          <td><p>{{ form.address_2 }}</p></td>
+        </tr>
+        <tr>
+          <td><h3>City:</h3></td>
+          <td><p>{{ form.city }}</p></td>
+        </tr>
+        <tr>
+          <td><h3>State:</h3></td>
+          <td><p>{{ form.state }}</p></td>
+        </tr>
+        <tr>
+          <td><h3>Zipcode:</h3></td>
+          <td><p>{{ form.zipcode }}</p></td>
+        </tr>
+      </table>
     </section>
   </div>
 {% endblock %}
+
+<style>
+  .shadow {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+  }
+
+  .bg-body {
+    background-color: #f7f7f9;
+  }
+
+  .rounded {
+    border-radius: 0.25rem;
+  }
+
+  .text-primary {
+    color: #007bff;
+  }
