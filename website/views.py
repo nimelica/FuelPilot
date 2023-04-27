@@ -144,7 +144,13 @@ def login():
 def profile_management():
     form = InfoForm()
     title = 'Profile'
+    client_info = ClientInformation.query.filter_by(user_credentials_id=session['user_id']).first()
+    client_information = ClientInformation.query.filter_by(user_credentials_id=session['user_id']).all()
     # if form.validate_on_submit():
+    if request.method == 'GET' and len(client_information) != 0:
+        flash('You have already made a profile. However, you may edit at any time.')
+        form = InfoForm(obj=client_info)
+
     if request.method == 'POST':
         # Create a new ClientInformation object and add it to the database
         new_client = ClientInformation(full_name=form.full_name.data,
@@ -154,7 +160,10 @@ def profile_management():
                                        state=form.state.data,
                                        zipcode=form.zipcode.data,
                                        user_credentials_id=session['user_id'])
-        db.session.add(new_client)
+        if len(client_information) != 0:
+            form.populate_obj(client_info)
+        else:
+            db.session.add(new_client)
         db.session.commit()
 
         # Check that the user_credentials_id attribute was set correctly
