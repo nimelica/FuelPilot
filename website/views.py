@@ -146,8 +146,6 @@ def login():
 def profile_management():
     form = InfoForm()
     title = 'Profile'
-    client_info = ClientInformation.query.filter_by(user_credentials_id=session['user_id']).first()
-    client_information = ClientInformation.query.filter_by(user_credentials_id=session['user_id']).all()
     # if form.validate_on_submit():
     if request.method == 'GET' and len(client_information) != 0:
         flash('You have already made a profile. However, you may edit at any time.')
