@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="shadow p-3 mb-5 bg-body rounded">
+    <header>
+      <h1 class="text-center">Welcome {{form.full_name}}!</h1>
+    </header>
+    <section class="address-info">
+      <h2>Address Information</h2>
+      <ul>
+        <li>
+          <h3>Main Address:</h3>
+          <p>{{ form.address_1 }}</p>
+        </li>
+        <hr>
+        <li>
+          <h3>Alternative Address:</h3>
+          <p>{{ form.address_2 }}</p>
+        </li>
+        <hr>
+        <li>
+          <h3>City:</h3>
+          <p>{{ form.city }}</p>
+        </li>
+        <hr>
+        <li>
+          <h3>State:</h3>
+          <p>{{ form.state }}</p>
+        </li>
+        <hr>
+        <li>
+          <h3>Zipcode:</h3>
+          <p>{{ form.zipcode }}</p>
+        </li>
+      </ul>
+    </section>
+  </div>
+{% endblock %}

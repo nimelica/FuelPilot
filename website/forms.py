@@ -34,6 +34,8 @@ class QuoteFuelForm(FlaskForm):
     get_quote = SubmitField("Get Quote", render_kw={"disabled": True})
 
 
+
+
 class QuoteFuelHistory(FlaskForm):
     column_names = ['Timestamp',
                     'Gallons Requested',
